@@ -1,10 +1,5 @@
-// backend/src/order/schemas/order.schema.ts
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
-
-
-export type OrderDocument = Order & Document;
-
 
 @Schema()
 export class Order {
@@ -12,15 +7,13 @@ export class Order {
   id: string;
 
   @Prop({ required: true })
-  film: string; // ID фильма
-
-
-  @Prop({ required: true })
-  session: string; // ID сеанса
-
+  film: string;
 
   @Prop({ required: true })
-  daytime: Date; // тип Date
+  session: string;
+
+  @Prop({ required: true })
+  daytime: Date;
 
   @Prop({ required: true })
   row: number;
@@ -32,4 +25,5 @@ export class Order {
   price: number;
 }
 
+export type OrderDocument = Order & Document;
 export const OrderSchema = SchemaFactory.createForClass(Order);

@@ -5,9 +5,7 @@ import { Film, FilmDocument } from '../films/schemas/film.schema';
 
 @Injectable()
 export class FilmRepository {
-  constructor(
-    @InjectModel(Film.name) private filmModel: Model<FilmDocument>,
-  ) {}
+  constructor(@InjectModel(Film.name) private filmModel: Model<FilmDocument>) {}
 
   async findById(id: string): Promise<Film | null> {
     return this.filmModel.findOne({ id }).exec();
@@ -35,3 +33,4 @@ export class FilmRepository {
     );
   }
 }
+export { Film };

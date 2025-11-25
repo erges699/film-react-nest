@@ -1,17 +1,17 @@
 // backend/src/films/films.service.ts
 import { Injectable } from '@nestjs/common';
-import { FilmRepository, Film, Session } from '../repository/film.repository';
+import { FilmRepository } from '../repository/film.repository';
 import { FilmsResponseDto, ScheduleResponseDto } from './dto/films.dto';
 
 @Injectable()
 export class FilmsService {
   constructor(private readonly filmRepository: FilmRepository) {}
 
-  getAllFilms(): FilmsResponseDto {
-    const films = this.filmRepository.findAll();
+  async getAllFilms(): Promise<FilmsResponseDto> {
+    const films = await this.filmRepository.findAll();
     return {
       total: films.length,
-      items: films.map(film => ({
+      items: films.map((film) => ({
         id: film.id,
         rating: film.rating,
         director: film.director,
@@ -25,13 +25,16 @@ export class FilmsService {
     };
   }
 
-  getScheduleById(filmId: string): ScheduleResponseDto | null {
-    const film = this.filmRepository.findById(filmId);
+  async getScheduleById(filmId: string): Promise<ScheduleResponseDto | null> {
+    const film = await this.filmRepository.findById(filmId); // await добавлен!
     if (!film) return null;
 
     return {
       total: film.schedule.length,
-      items: film.schedule,
+      items: film.schedule.map((session) => ({
+        ...session,
+        daytime: session.daytime.toISOString(), // Date → string
+      })),
     };
   }
 }
