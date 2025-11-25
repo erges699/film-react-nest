@@ -8,7 +8,6 @@ import { FilmsModule } from './films/films.module';
 import { OrderModule } from './order/order.module';
 import { configProvider } from './app.config.provider';
 
-
 @Module({
   imports: [
     ConfigModule.forRoot({
