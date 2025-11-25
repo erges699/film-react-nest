@@ -1,8 +1,7 @@
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ConfigService } from '@nestjs/config';
 import { Provider } from '@nestjs/common';
 
 export const configProvider: Provider = {
-  
   provide: 'CONFIG',
   useFactory: (configService: ConfigService) => ({
     database: {

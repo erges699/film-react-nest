@@ -15,7 +15,8 @@ import { configProvider } from './app.config.provider';
       cache: true,
     }),
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', 'public'),
+      rootPath: join(__dirname, '..', 'public', 'content', 'afisha'),
+      serveRoot: '/content/afisha',
     }),
     MongooseModule.forRoot(process.env.DATABASE_URL),
     FilmsModule,
