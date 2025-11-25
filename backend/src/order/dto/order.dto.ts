@@ -1,25 +1,40 @@
 //TODO реализовать DTO для /orders
-import { IsString, IsNumber, IsDate } from 'class-validator';
+import { IsNotEmpty, IsString, IsNumber, IsDate, Validate } from 'class-validator';
+import { Transform } from 'class-transformer';
+import { isUUID } from 'class-validator';
+
 
 export class CreateOrderDto {
+  @IsNotEmpty()
   @IsString()
+  @Validate(isUUID, { message: 'Film ID must be a valid UUID' })
   film: string;
 
+
+  @IsNotEmpty()
   @IsString()
+  @Validate(isUUID, { message: 'Session ID must be a valid UUID' })
   session: string;
 
+  @IsNotEmpty()
+  @Transform(({ value }) => new Date(value))
   @IsDate()
-  daytime: string;
+  daytime: Date;
 
+
+  @IsNotEmpty()
   @IsNumber()
   row: number;
 
+  @IsNotEmpty()
   @IsNumber()
   seat: number;
 
+  @IsNotEmpty()
   @IsNumber()
   price: number;
 }
+
 
 export class OrderDto {
   id: string;

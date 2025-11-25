@@ -1,43 +1,37 @@
-// backend/src/repository/film.repository.ts
 import { Injectable } from '@nestjs/common';
-
-export interface Film {
-  id: string;
-  rating: number;
-  director: string;
-  tags: string[];
-  image: string;
-  cover: string;
-  title: string;
-  about: string;
-  description: string;
-  schedule: Session[];
-}
-
-export interface Session {
-  id: string;
-  daytime: string;
-  hall: number;
-  rows: number;
-  seats: number;
-  price: number;
-  taken: string[];
-}
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { Film, FilmDocument } from '../films/schemas/film.schema';
 
 @Injectable()
 export class FilmRepository {
-  private films: Film[] = [];
+  constructor(
+    @InjectModel(Film.name) private filmModel: Model<FilmDocument>,
+  ) {}
 
-  constructor() {
-    // Инициализация тестовыми данными
-    this.films = require('../../../test/mongodb_initial_stub.json');
+  async findById(id: string): Promise<Film | null> {
+    return this.filmModel.findOne({ id }).exec();
   }
 
-  findAll(): Film[] {
-    return this.films;
+  async findAll(): Promise<Film[]> {
+    return this.filmModel.find().exec();
   }
 
-  findById(id: string): Film | undefined {
-    return this.films.find(film => film.id === id);
+  // Метод для обновления списка занятых мест
+  async updateTakenSeats(
+    filmId: string,
+    sessionId: string,
+    row: number,
+    seat: number,
+  ): Promise<void> {
+    await this.filmModel.updateOne(
+      {
+        id: filmId,
+        'schedule.id': sessionId,
+      },
+      {
+        $push: { 'schedule.$.taken': `${row}-${seat}` },
+      },
+    );
   }
 }

@@ -1,31 +1,21 @@
 // backend/src/repository/order.repository.ts
 import { Injectable } from '@nestjs/common';
-import { v4 as uuid } from 'uuid';
-
-export interface Order {
-  id: string;
-  film: string;
-  session: string;
-  daytime: string;
-  row: number;
-  seat: number;
-  price: number;
-}
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { Order, OrderDocument } from '../order/schemas/order.schema';
 
 @Injectable()
 export class OrderRepository {
-  private orders: Order[] = [];
+  constructor(
+    @InjectModel(Order.name) private orderModel: Model<OrderDocument>,
+  ) {}
 
-  create(order: Omit<Order, 'id'>): Order {
-    const newOrder = {
-      ...order,
-      id: uuid(),
-    };
-    this.orders.push(newOrder);
-    return newOrder;
+  async create(order: Order): Promise<Order> {
+    const createdOrder = new this.orderModel(order);
+    return createdOrder.save();
   }
 
-  findAll(): Order[] {
-    return this.orders;
+  async findAll(): Promise<Order[]> {
+    return this.orderModel.find().exec();
   }
 }
