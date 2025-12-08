@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { MongooseModule } from '@nestjs/mongoose';
+// import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 
 export const databaseProviders = [
@@ -29,15 +29,15 @@ export const databaseProviders = [
   }),
 
   // Mongoose (MongoDB)
-  MongooseModule.forRootAsync({
-    imports: [ConfigModule],
-    useFactory: (config: ConfigService) => {
-      const driver = config.get<string>('DATABASE_DRIVER');
-      
-      return driver === 'mongodb'
-        ? { uri: config.get<string>('DATABASE_URL') }
-        : { uri: '' };
-    },
-    inject: [ConfigService],
-  }),
+  // MongooseModule.forRootAsync({
+  //   imports: [ConfigModule],
+  //   useFactory: (config: ConfigService) => {
+  //     const driver = config.get<string>('DATABASE_DRIVER');
+  //     
+  //     return driver === 'mongodb'
+  //       ? { uri: config.get<string>('DATABASE_URL') }
+  //       : { uri: '' };
+  //   },
+  //   inject: [ConfigService],
+  // }),
 ];

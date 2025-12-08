@@ -1,10 +1,10 @@
 // backend/src/entity/film.entity.ts
-import { Entity, PrimaryColumn, Column, OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { ScheduleEntity } from './schedule.entity';
 
 @Entity('films')
 export class FilmEntity {
-  @PrimaryColumn('varchar', { length: 255 })
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column('decimal', { precision: 3, scale: 1, nullable: false })
@@ -13,7 +13,7 @@ export class FilmEntity {
   @Column('varchar', { length: 255, nullable: false })
   director: string;
 
-  @Column('simple-array', { nullable: false })
+  @Column('jsonb', { nullable: false }) // Исправлено: jsonb вместо simple-array
   tags: string[];
 
   @Column('varchar', { length: 255, nullable: false })

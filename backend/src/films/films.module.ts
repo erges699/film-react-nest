@@ -1,14 +1,14 @@
 // backend/src/films/films.module.ts
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { MongooseModule } from '@nestjs/mongoose';
+// import { MongooseModule } from '@nestjs/mongoose';
 
 import { FilmsController } from './films.controller';
 import { FilmsService } from './films.service';
 import { FilmRepository } from '../database/repositories/film.repository';
 
 // Для MongoDB
-import { Film, FilmSchema } from './schemas/film.schema';
+// import { Film, FilmSchema } from './schemas/film.schema';
 
 // Для PostgreSQL
 import { FilmEntity } from '../entity/film.entity';
@@ -17,7 +17,7 @@ import { FilmEntity } from '../entity/film.entity';
   imports: [
     // Импорт репозитория (работает с любой СУБД)
     TypeOrmModule.forFeature([FilmEntity]),
-    MongooseModule.forFeature([{ name: Film.name, schema: FilmSchema }]),
+    // MongooseModule.forFeature([{ name: Film.name, schema: FilmSchema }]),
   ],
   controllers: [FilmsController],
   providers: [FilmsService, FilmRepository],

@@ -1,7 +1,7 @@
 // backend/src/order/order.module.ts
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { MongooseModule } from '@nestjs/mongoose';
+// import { MongooseModule } from '@nestjs/mongoose';
 
 import { OrderController } from './order.controller';
 import { OrderService } from './order.service';
@@ -23,9 +23,9 @@ import { FilmsModule } from 'src/films/films.module';
     TypeOrmModule.forFeature([OrderEntity]),
     
     // Конфигурация для Mongoose (MongoDB)
-    MongooseModule.forFeature([
-      { name: Order.name, schema: OrderSchema },
-    ]),
+    // MongooseModule.forFeature([
+    //   { name: Order.name, schema: OrderSchema },
+    // ]),
   ],
   controllers: [OrderController],
   providers: [OrderService, OrderRepository],
