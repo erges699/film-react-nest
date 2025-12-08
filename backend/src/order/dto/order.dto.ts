@@ -1,4 +1,4 @@
-//TODO реализовать DTO для /orders
+// backend/src/order/dto/order.dto.ts
 import { IsNotEmpty, IsString, IsNumber, IsDate, Validate } from 'class-validator';
 import { Transform } from 'class-transformer';
 import { isUUID } from 'class-validator';
