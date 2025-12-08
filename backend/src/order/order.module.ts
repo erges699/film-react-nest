@@ -5,7 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { OrderController } from './order.controller';
 import { OrderService } from './order.service';
-import { OrderRepository } from '../database/repositories/order.repository';
+import { DatabaseModule } from '../database/database.module';
 
 // Для PostgreSQL
 import { OrderEntity } from '../entity/order.entity';
@@ -17,18 +17,19 @@ import { FilmsModule } from 'src/films/films.module';
 @Module({
   imports: [
     // Импорт зависимостей
-    FilmsModule, // Для доступа к FilmRepository (если требуется в OrderService)
-    
+    FilmsModule,
+    DatabaseModule,
+
     // Конфигурация для TypeORM (PostgreSQL)
     TypeOrmModule.forFeature([OrderEntity]),
-    
+
     // Конфигурация для Mongoose (MongoDB)
     // MongooseModule.forFeature([
     //   { name: Order.name, schema: OrderSchema },
     // ]),
   ],
   controllers: [OrderController],
-  providers: [OrderService, OrderRepository],
-  exports: [OrderRepository], // Для возможности использования в других модулях
+  providers: [OrderService],
+  exports: [],
 })
 export class OrderModule {}

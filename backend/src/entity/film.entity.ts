@@ -13,7 +13,7 @@ export class FilmEntity {
   @Column('varchar', { length: 255, nullable: false })
   director: string;
 
-  @Column('jsonb', { nullable: false }) // Исправлено: jsonb вместо simple-array
+  @Column('jsonb', { nullable: false })
   tags: string[];
 
   @Column('varchar', { length: 255, nullable: false })

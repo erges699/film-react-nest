@@ -1,3 +1,4 @@
+//backend/src/config/database.config.ts
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 // import { MongooseModule } from '@nestjs/mongoose';
@@ -9,7 +10,7 @@ export const databaseProviders = [
     imports: [ConfigModule],
     useFactory: (config: ConfigService) => {
       const driver = config.get<string>('DATABASE_DRIVER');
-      
+
       if (driver === 'postgres') {
         return {
           type: 'postgres',
@@ -33,7 +34,7 @@ export const databaseProviders = [
   //   imports: [ConfigModule],
   //   useFactory: (config: ConfigService) => {
   //     const driver = config.get<string>('DATABASE_DRIVER');
-  //     
+  //
   //     return driver === 'mongodb'
   //       ? { uri: config.get<string>('DATABASE_URL') }
   //       : { uri: '' };

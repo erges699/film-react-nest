@@ -1,6 +1,6 @@
 // backend/src/films/films.service.ts
 import { Injectable } from '@nestjs/common';
-import { FilmRepository } from '../repository/film.repository';
+import { FilmRepository } from '../database/repositories/film.repository';
 import { FilmsResponseDto, ScheduleResponseDto } from './dto/films.dto';
 
 @Injectable()

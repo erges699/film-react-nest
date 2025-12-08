@@ -18,11 +18,13 @@ async function bootstrap() {
 
     // Глобальные настройки
     app.setGlobalPrefix('api/afisha');
-    app.useGlobalPipes(new ValidationPipe({
-      whitelist: true,
-      forbidNonWhitelisted: true,
-      transform: true,
-    }));
+    app.useGlobalPipes(
+      new ValidationPipe({
+        whitelist: true,
+        forbidNonWhitelisted: true,
+        transform: true,
+      }),
+    );
     app.useGlobalFilters(new HttpExceptionFilter());
     app.enableCors();
 
@@ -38,7 +40,6 @@ async function bootstrap() {
   - Database driver: ${configService.get('DATABASE_DRIVER')}
   - URL: http://localhost:${port}/api/afisha
     `);
-
   } catch (error) {
     logger.error('Failed to start application', error.stack);
     process.exit(1);
@@ -46,4 +47,3 @@ async function bootstrap() {
 }
 
 bootstrap();
-

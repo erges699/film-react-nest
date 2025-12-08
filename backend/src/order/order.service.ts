@@ -1,8 +1,9 @@
 // backend/src/order/order.service.ts
 import { Injectable, BadRequestException } from '@nestjs/common';
-import { OrderRepository } from '../repository/order.repository';
-import { FilmRepository } from '../repository/film.repository';
+import { OrderRepository } from '../database/repositories/order.repository';
+import { FilmRepository } from '../database/repositories/film.repository';
 import { CreateOrderDto, OrderDto } from './dto/order.dto';
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class OrderService {
@@ -17,9 +18,11 @@ export class OrderService {
       throw new BadRequestException(`Фильм с ID ${dto.film} не найден`);
     }
 
-    const session = film.schedule.find(s => s.id === dto.session);
+    const session = film.schedule.find((s) => s.id === dto.session);
     if (!session) {
-      throw new BadRequestException(`Сеанс с ID ${dto.session} не найден в фильме`);
+      throw new BadRequestException(
+        `Сеанс с ID ${dto.session} не найден в фильме`,
+      );
     }
 
     const isTaken = session.taken.includes(`${dto.row}-${dto.seat}`);
@@ -49,6 +52,6 @@ export class OrderService {
   }
 
   private generateOrderId(): string {
-    return require('uuid').v4();
+    return uuidv4();
   }
 }

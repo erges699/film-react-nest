@@ -1,4 +1,5 @@
 // backend/src/database/typeorm/typeorm.module.ts
+// backend/src/database/typeorm/typeorm.module.ts
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
@@ -9,11 +10,11 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
       imports: [ConfigModule],
       useFactory: (config: ConfigService) => ({
         type: 'postgres',
-        host: config.get<string>('DATABASE_HOST'),
-        port: config.get<number>('DATABASE_PORT'),
-        username: config.get<string>('DATABASE_USERNAME'),
-        password: config.get<string>('DATABASE_PASSWORD'),
-        database: config.get<string>('DATABASE_NAME'),
+        host: config.get<string>('POSTGRES_HOST'),
+        port: config.get<number>('POSTGRES_PORT'),
+        username: config.get<string>('POSTGRES_USER'),
+        password: config.get<string>('POSTGRES_PASSWORD'),
+        database: config.get<string>('POSTGRES_DB'),
         entities: [__dirname + '/../../entity/*.entity{.ts,.js}'],
         synchronize: true,
         logging: true,
@@ -25,3 +26,4 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
   ],
 })
 export class TypeOrmConfigModule {}
+

@@ -33,4 +33,36 @@ export class FilmRepository implements FilmsRepository {
   async delete(id: string): Promise<void> {
     await this.repo.delete(id);
   }
+  async updateTakenSeats(
+    filmId: string,
+    sessionId: string,
+    row: number,
+    seat: number,
+  ): Promise<void> {
+    // 1. Получаем фильм со всеми сеансами
+    const film = await this.repo.findOne({
+      where: { id: filmId },
+      relations: ['schedule'],
+    });
+
+    if (!film) {
+      throw new Error(`Film with ID ${filmId} not found`);
+    }
+
+    // 2. Ищем нужный сеанс в расписании
+    const session = film.schedule.find((s) => s.id === sessionId);
+    if (!session) {
+      throw new Error(
+        `Session with ID ${sessionId} not found in film ${filmId}`,
+      );
+    }
+
+    // 3. Обновляем занятые места
+    const takenSeat = `${row}-${seat}`;
+    if (!session.taken.includes(takenSeat)) {
+      session.taken.push(takenSeat);
+    }
+
+    await this.repo.save(film);
+  }
 }
