@@ -26,14 +26,14 @@ export class FilmsService {
   }
 
   async getScheduleById(filmId: string): Promise<ScheduleResponseDto | null> {
-    const film = await this.filmRepository.findById(filmId); // await добавлен!
+    const film = await this.filmRepository.findById(filmId);
     if (!film) return null;
 
     return {
       total: film.schedule.length,
       items: film.schedule.map((session) => ({
         ...session,
-        daytime: session.daytime.toISOString(), // Date → string
+        daytime: session.daytime.toISOString(),
       })),
     };
   }

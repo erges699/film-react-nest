@@ -1,3 +1,4 @@
+// backend/src/films/films.module.ts
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { FilmsController } from './films.controller';

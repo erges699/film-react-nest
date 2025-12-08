@@ -1,5 +1,6 @@
+// backend/src/order/order.module.ts
 import { Module } from '@nestjs/common';
-import { MongooseModule } from '@nestjs/mongoose'; // ← Добавьте импорт
+import { MongooseModule } from '@nestjs/mongoose';
 import { OrderController } from './order.controller';
 import { OrderService } from './order.service';
 import { OrderRepository } from '../repository/order.repository';
