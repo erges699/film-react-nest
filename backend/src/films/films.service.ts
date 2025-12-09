@@ -7,6 +7,7 @@ import { FilmsResponseDto, ScheduleResponseDto } from './dto/films.dto';
 export class FilmsService {
   constructor(private readonly filmRepository: FilmRepository) {}
 
+
   async getAllFilms(): Promise<FilmsResponseDto> {
     const films = await this.filmRepository.findAll();
     return {
@@ -29,9 +30,11 @@ export class FilmsService {
     const film = await this.filmRepository.findById(filmId);
     if (!film) return null;
 
+    const schedule = film.schedule || [];
+
     return {
-      total: film.schedule.length,
-      items: film.schedule.map((session) => ({
+      total: schedule.length,
+      items: schedule.map((session) => ({
         ...session,
         daytime: session.daytime.toISOString(),
       })),

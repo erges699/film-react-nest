@@ -14,7 +14,7 @@ import { ValidationPipe } from '@nestjs/common';
 import { OrderService } from './order.service';
 import { CreateOrderDto, OrderDto, OrdersResponseDto } from './dto/order.dto';
 
-@Controller('api/afisha/order')
+@Controller('afisha/order')
 export class OrderController {
   constructor(private readonly orderService: OrderService) {}
 

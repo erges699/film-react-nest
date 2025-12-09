@@ -17,7 +17,7 @@ async function bootstrap() {
     const configService = app.get(ConfigService);
 
     // Глобальные настройки
-    app.setGlobalPrefix('api/afisha');
+    app.setGlobalPrefix('api/');
     app.useGlobalPipes(
       new ValidationPipe({
         whitelist: true,
