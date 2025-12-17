@@ -4,19 +4,19 @@ import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { HttpExceptionFilter } from './filters/http-exception.filter';
 import { ConfigService } from '@nestjs/config';
-import { Logger } from '@nestjs/common';
+//import { JsonLogger } from './loggers/json.logger';
+import { TskvLogger } from './loggers/tskv.logger';
 
 async function bootstrap() {
-  const logger = new Logger('Bootstrap');
+  const logger = new TskvLogger('Bootstrap');
 
   try {
-    // Создаём приложение
-    const app = await NestFactory.create(AppModule);
+    const app = await NestFactory.create(AppModule, {
+      logger,
+    });
 
-    // Получаем конфигурацию
     const configService = app.get(ConfigService);
 
-    // Глобальные настройки
     app.setGlobalPrefix('api/');
     app.useGlobalPipes(
       new ValidationPipe({
@@ -28,10 +28,7 @@ async function bootstrap() {
     app.useGlobalFilters(new HttpExceptionFilter());
     app.enableCors();
 
-    // Получаем порт из конфигурации (с fallback на 3000)
     const port = configService.get<number>('PORT', 3000);
-
-    // Запускаем сервер
     await app.listen(port);
 
     logger.log(`

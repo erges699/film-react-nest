@@ -1,6 +1,6 @@
 // backend/src/app.module.ts
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 
@@ -10,29 +10,39 @@ import { OrderModule } from './order/order.module';
 
 import { configProvider } from './app.config.provider';
 
+
+// Логгеры
+import { DevLogger } from './loggers/dev.logger';
+import { JsonLogger } from './loggers/json.logger';
+import { TskvLogger } from './loggers/tskv.logger';
+
 @Module({
   imports: [
-    // Глобальная конфигурация
     ConfigModule.forRoot({
       isGlobal: true,
       cache: true,
       envFilePath: '.env',
     }),
-
-    // Статика
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'public', 'content', 'afisha'),
       serveRoot: '/content/afisha',
     }),
-
-    // Модуль БД (подключает TypeORM или Mongoose в зависимости от DATABASE_DRIVER)
     DatabaseModule,
-
-    // Бизнес-модули
     FilmsModule,
     OrderModule,
   ],
-  providers: [configProvider],
+  providers: [
+    configProvider,
+    DevLogger,
+    {
+      provide: 'JsonLogger',
+      useClass: JsonLogger,
+    },
+    {
+      provide: 'TskvLogger',
+      useClass: TskvLogger,
+    },
+  ],
+  exports: ['JsonLogger', 'TskvLogger'],
 })
 export class AppModule {}
-
