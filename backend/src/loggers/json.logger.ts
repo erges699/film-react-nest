@@ -1,16 +1,13 @@
 import { Injectable, LoggerService, Inject } from '@nestjs/common';
 import { inspect } from 'util';
-import { LOGGER_PREFIX } from './logger.constants';
+import { LOGGER_PREFIX, LOGGER_CONTEXT } from './logger.constants';
 
 @Injectable()
 export class JsonLogger implements LoggerService {
-  private readonly context?: string;
-  private readonly prefix: string;
-
-  constructor(@Inject(LOGGER_PREFIX) prefix: string, context?: string) {
-    this.prefix = prefix;
-    this.context = context;
-  }
+  constructor(
+    @Inject(LOGGER_PREFIX) private prefix: string,
+    @Inject(LOGGER_CONTEXT) private context: string,
+  ) {}
 
   private formatMessage(
     level: string,

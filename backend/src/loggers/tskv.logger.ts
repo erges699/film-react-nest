@@ -1,10 +1,12 @@
-import { Injectable, LoggerService } from '@nestjs/common';
+// backend/src/loggers/tskv.logger.ts
+import { Injectable, LoggerService, Inject } from '@nestjs/common';
+import { TSKV_LOGGER_CONTEXT } from './logger.constants';
 
 @Injectable()
 export class TskvLogger implements LoggerService {
   private readonly defaultContext?: string;
 
-  constructor(context?: string) {
+  constructor(@Inject(TSKV_LOGGER_CONTEXT) context?: string) {
     this.defaultContext = context;
   }
 
@@ -23,7 +25,7 @@ export class TskvLogger implements LoggerService {
     stack?: string,
   ): string {
     const timestamp = new Date().toISOString();
-    
+
     const fields: string[] = [
       `timestamp=${this.escapeValue(timestamp)}`,
       `level=${this.escapeValue(level)}`,
@@ -66,7 +68,9 @@ export class TskvLogger implements LoggerService {
   }
 
   log(message: unknown, context?: string): void {
-    process.stdout.write(this.format('log', message, context || this.defaultContext));
+    process.stdout.write(
+      this.format('log', message, context || this.defaultContext),
+    );
   }
 
   error(message: unknown, trace?: string, context?: string): void {
@@ -76,11 +80,15 @@ export class TskvLogger implements LoggerService {
   }
 
   warn(message: unknown, context?: string): void {
-    process.stdout.write(this.format('warn', message, context || this.defaultContext));
+    process.stdout.write(
+      this.format('warn', message, context || this.defaultContext),
+    );
   }
 
   debug(message: unknown, context?: string): void {
-    process.stdout.write(this.format('debug', message, context || this.defaultContext));
+    process.stdout.write(
+      this.format('debug', message, context || this.defaultContext),
+    );
   }
 
   verbose(message: unknown, context?: string): void {
