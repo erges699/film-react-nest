@@ -2,12 +2,12 @@ services:
   db:
     image: postgres:16.4
     environment:
-      POSTGRES_USER: ${POSTGRES_USERNAME}
+      POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: ${DATABASE_NAME}
-      DATABASE_USERNAME: ${DATABASE_USERNAME}
-      DATABASE_NAME: ${DATABASE_NAME}
-      DATABASE_PASSWORD: ${DATABASE_PASSWORD}      
+      POSTGRES_DB: ${POSTGRES_DB}
+      DATABASE_USERNAME: ${POSTGRES_USER}
+      DATABASE_NAME: ${POSTGRES_DB}
+      DATABASE_PASSWORD: ${POSTGRES_PASSWORD}      
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./db-init:/docker-entrypoint-initdb.d
@@ -29,7 +29,7 @@ services:
      - internal
   
   frontend:
-    image: 'ghcr.io/${OWNER}/pr_frontend:frn'
+    image: 'ghcr.io/${GIT_USER}/filmreactnestfront:latest'
     build: 
       context: frontend
     environment:
@@ -40,24 +40,24 @@ services:
      - frontend_build:/app/dist    
 
   backend:
-    image: 'ghcr.io/${OWNER}/pr_backend:frn'
+    image: 'ghcr.io/${GIT_USER}/filmreactnestback:latest'
     build: 
       context: backend
     environment:
-      PORT: ${DATABASE_PORT}
+      PORT: ${POSTGRES_PORT}
       DATABASE_DRIVER: ${DATABASE_DRIVER}
-      DATABASE_URL: "postgres://db:5432/${DATABASE_NAME}"
-      DATABASE_USERNAME: ${DATABASE_USERNAME}
-      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+      DATABASE_URL: "postgres://db:5432/${POSTGRES_DB}"
+      DATABASE_USERNAME: ${POSTGRES_USER}
+      DATABASE_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
       - 3000:3000
     networks:
-    - internal
+      - internal
     depends_on:
       - db 
 
   server:
-    image: 'ghcr.io/${OWNER}/pr_server:frn'
+    image: 'ghcr.io/${GIT_USER}/pr_server:frn'
     build: 
       context: nginx
     ports:
