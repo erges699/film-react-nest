@@ -19,6 +19,7 @@ describe('JsonLogger', () => {
     logger = module.get<JsonLogger>(JsonLogger);
 
     // Получаем мок-версию inspect
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
     inspectMock = require('util').inspect;
   });
 

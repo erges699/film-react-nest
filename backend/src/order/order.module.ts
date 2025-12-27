@@ -11,7 +11,7 @@ import { DatabaseModule } from '../database/database.module';
 import { OrderEntity } from '../entity/order.entity';
 
 // Для MongoDB
-import { Order, OrderSchema } from './schemas/order.schema';
+// import { Order, OrderSchema } from './schemas/order.schema';
 import { FilmsModule } from 'src/films/films.module';
 
 @Module({
