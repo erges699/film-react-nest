@@ -1,43 +1,40 @@
-import { Injectable, LoggerService } from '@nestjs/common';
+import { Injectable, LoggerService, Inject } from '@nestjs/common';
 import { inspect } from 'util';
+import { LOGGER_PREFIX } from './logger.constants';
 
 @Injectable()
 export class JsonLogger implements LoggerService {
   private readonly context?: string;
+  private readonly prefix: string;
 
-  constructor(context?: string) {
+  constructor(@Inject(LOGGER_PREFIX) prefix: string, context?: string) {
+    this.prefix = prefix;
     this.context = context;
   }
 
-  /**
-   * Формирует структурированное лог‑сообщение в формате JSON
-   * @param level Уровень логирования
-   * @param message Основное сообщение
-   * @param params Дополнительные параметры
-   * @returns JSON‑строка с логом
-   */
-    private formatMessage(
+  private formatMessage(
     level: string,
     message: unknown,
     params: unknown[] = [],
-    extraContext?: string
-    ): string {
+    extraContext?: string,
+  ): string {
     const logEntry = {
-        timestamp: new Date().toISOString(),
-        level,
-        message,
-        context: extraContext ? `${this.context}|${extraContext}` : this.context,
-        params: params.length > 0 ? params : undefined,
-        pid: process.pid,
+      timestamp: new Date().toISOString(),
+      level,
+      message,
+      context: [this.prefix, this.context, extraContext]
+        .filter(Boolean)
+        .join('|'),
+      params: params.length > 0 ? params : undefined,
+      pid: process.pid,
     };
 
     return inspect(logEntry, {
-        depth: null,
-        colors: false,
-        compact: false,
+      depth: null,
+      colors: false,
+      compact: false,
     });
-    }
-
+  }
 
   log(message: unknown, ...params: unknown[]): void {
     console.log(this.formatMessage('log', message, params));

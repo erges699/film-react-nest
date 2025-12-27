@@ -11,6 +11,7 @@ import { OrderModule } from './order/order.module';
 import { configProvider } from './app.config.provider';
 
 // Логгеры
+import { LOGGER_PREFIX } from './loggers/logger.constants';
 import { DevLogger } from './loggers/dev.logger';
 import { JsonLogger } from './loggers/json.logger';
 import { TskvLogger } from './loggers/tskv.logger';
@@ -40,6 +41,10 @@ import { TskvLogger } from './loggers/tskv.logger';
     {
       provide: 'TskvLogger',
       useClass: TskvLogger,
+    },
+    {
+      provide: LOGGER_PREFIX,
+      useValue: 'my-app-logger',
     },
   ],
   exports: ['JsonLogger', 'TskvLogger'],
