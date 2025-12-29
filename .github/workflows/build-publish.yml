@@ -32,7 +32,7 @@ jobs:
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          password: ${{ secrets.GHUB_TOKEN }}
 
       - name: Build and push frontend
         uses: docker/build-push-action@v5
@@ -54,7 +54,7 @@ jobs:
             ${{ env.REGISTRY }}/${{ env.IMAGE_PREFIX }}/filmreactnestback:latest
             ${{ env.REGISTRY }}/${{ env.IMAGE_PREFIX }}/filmreactnestback:${{ github.sha }}
           build-args: |
-            DATABASE_URL=postgresql://${{ env.DATABASE_USERNAME }}:${{ env.DATABASE_PASSWORD }}@db:5432/${{ env.DATABASE_NAME }}
+            DATABASE_URL=postgresql://${{ secrets.DATABASE_USERNAME }}:${{ secrets.DATABASE_PASSWORD }}@db:5432/${{ secrets.DATABASE_NAME }}
 
       - name: Build and push nginx
         uses: docker/build-push-action@v5
