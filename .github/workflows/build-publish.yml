@@ -11,7 +11,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_PREFIX: ${{ toLower(github.repository_owner) }}
+  IMAGE_PREFIX: ${{ github.repository_owner }}
   FRONTEND_IMAGE: filmreactnestfront
   BACKEND_IMAGE: filmreactnestback
   NGINX_IMAGE: nginx
