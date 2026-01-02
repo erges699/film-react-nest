@@ -11,7 +11,10 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_PREFIX: ${{ github.repository_owner }}.toLowerCase()
+  IMAGE_PREFIX: ${{ toLower(github.repository_owner) }}
+  FRONTEND_IMAGE: filmreactnestfront
+  BACKEND_IMAGE: filmreactnestback
+  NGINX_IMAGE: nginx
 
 jobs:
   build-and-push:
@@ -32,35 +35,44 @@ jobs:
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
-          password: ${{ secrets.GHA_PATOKEN }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and push frontend
         uses: docker/build-push-action@v5
         with:
-          context: ./frontend/Dockerfile
+          context: ./frontend
+          file: ./frontend/Dockerfile
           push: ${{ github.event_name == 'push' }}
           tags: |
-            ${{ env.REGISTRY }}/${{ env.IMAGE_PREFIX }}/filmreactnestfront:latest
-            ${{ env.REGISTRY }}/${{ env.IMAGE_PREFIX }}/filmreactnestfront:${{ github.sha }}
+            ${{ env.REGISTRY }}/${{ env.IMAGE_PREFIX }}/${{ env.FRONTEND_IMAGE }}:latest
+            ${{ env.REGISTRY }}/${{ env.IMAGE_PREFIX }}/${{ env.FRONTEND_IMAGE }}:${{ github.sha }}
           build-args: |
             VITE_API_URL=http://localhost:3000/api
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
       - name: Build and push backend
         uses: docker/build-push-action@v5
         with:
-          context: ./backend/Dockerfile
+          context: ./backend
+          file: ./backend/Dockerfile
           push: ${{ github.event_name == 'push' }}
           tags: |
-            ${{ env.REGISTRY }}/${{ env.IMAGE_PREFIX }}/filmreactnestback:latest
-            ${{ env.REGISTRY }}/${{ env.IMAGE_PREFIX }}/filmreactnestback:${{ github.sha }}
+            ${{ env.REGISTRY }}/${{ env.IMAGE_PREFIX }}/${{ env.BACKEND_IMAGE }}:latest
+            ${{ env.REGISTRY }}/${{ env.IMAGE_PREFIX }}/${{ env.BACKEND_IMAGE }}:${{ github.sha }}
           build-args: |
             DATABASE_URL=postgresql://${{ secrets.DATABASE_USERNAME }}:${{ secrets.DATABASE_PASSWORD }}@db:5432/${{ secrets.DATABASE_NAME }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
       - name: Build and push nginx
         uses: docker/build-push-action@v5
         with:
-          context: ./nginx/Dockerfile
+          context: ./nginx
+          file: ./nginx/Dockerfile
           push: ${{ github.event_name == 'push' }}
           tags: |
-            ${{ env.REGISTRY }}/${{ env.IMAGE_PREFIX }}/nginx:latest
-            ${{ env.REGISTRY }}/${{ env.IMAGE_PREFIX }}/nginx:${{ github.sha }}
+            ${{ env.REGISTRY }}/${{ env.IMAGE_PREFIX }}/${{ env.NGINX_IMAGE }}:latest
+            ${{ env.REGISTRY }}/${{ env.IMAGE_PREFIX }}/${{ env.NGINX_IMAGE }}:${{ github.sha }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
