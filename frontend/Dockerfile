@@ -6,7 +6,7 @@ WORKDIR /app
 COPY package*.json ./
 COPY .env.example ./.env
 
-RUN npm install
+RUN npm ci
 
 COPY . .
 
