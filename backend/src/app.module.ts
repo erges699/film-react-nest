@@ -1,19 +1,64 @@
+// backend/src/app.module.ts
 import { Module } from '@nestjs/common';
-import {ServeStaticModule} from "@nestjs/serve-static";
-import {ConfigModule} from "@nestjs/config";
-import * as path from "node:path";
+import { ConfigModule } from '@nestjs/config';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
-import {configProvider} from "./app.config.provider";
+import { DatabaseModule } from './database/database.module';
+import { FilmsModule } from './films/films.module';
+import { OrderModule } from './order/order.module';
+
+import { configProvider } from './app.config.provider';
+
+// Логгеры
+import {
+  LOGGER_PREFIX,
+  LOGGER_CONTEXT,
+  TSKV_LOGGER_CONTEXT,
+} from './loggers/logger.constants';
+import { DevLogger } from './loggers/dev.logger';
+import { JsonLogger } from './loggers/json.logger';
+import { TskvLogger } from './loggers/tskv.logger';
 
 @Module({
   imports: [
-	ConfigModule.forRoot({
-          isGlobal: true,
-          cache: true
-      }),
-      // @todo: Добавьте раздачу статических файлов из public
+    ConfigModule.forRoot({
+      isGlobal: true,
+      cache: true,
+      envFilePath: '.env',
+    }),
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'public', 'content', 'afisha'),
+      serveRoot: '/content/afisha',
+    }),
+    DatabaseModule,
+    FilmsModule,
+    OrderModule,
   ],
-  controllers: [],
-  providers: [configProvider],
+  providers: [
+    configProvider,
+    DevLogger,
+    {
+      provide: 'JsonLogger',
+      useClass: JsonLogger,
+    },
+    {
+      provide: 'TskvLogger',
+      useClass: TskvLogger,
+    },
+    {
+      provide: LOGGER_PREFIX,
+      useValue: 'my-app-logger',
+    },
+    {
+      provide: LOGGER_CONTEXT,
+      useValue: 'AppModule',
+    },
+    {
+      provide: TSKV_LOGGER_CONTEXT,
+      useValue: 'TskvContext',
+    },
+  ],
+  exports: ['JsonLogger', 'TskvLogger'],
 })
 export class AppModule {}

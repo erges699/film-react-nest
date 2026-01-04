@@ -1,0 +1,26 @@
+name: Deploy to Server
+
+on:
+  push:
+    branches: [ review-3 ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up SSH
+        uses: webfactory/ssh-agent@v0.8.0
+        with:
+          ssh-private-key: ${{ secrets.CLOUD_VM_SSH_KEY }}
+
+      - name: Deploy to server
+        run: |
+          ssh -o StrictHostKeyChecking=no \
+              -p 22 admin1@130.193.56.88 \
+              "cd /home/admin1/film-react-nest/ && \
+               docker-compose -f docker-compose.pub.yml pull && \
+               docker-compose -f docker-compose.pub.yml restart"
