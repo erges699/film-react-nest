@@ -39,25 +39,20 @@ services:
       - db
 
   frontend:
-    image: ghcr.io/${GIT_USER}/filmreactnestfront:latest
+    image: ${GIT_USER}/filmreactnestfront:latest
     container_name: film-frontend
-    build:
-      context: ./frontend
     environment:
       VITE_BASE_URL: /
       VITE_API_URL: /api/afisha
       VITE_CDN_URL: /content/afisha
-    restart: unless-stopped
     volumes:
       - frontend-data:/app/dist
     networks:
       - internal
 
   backend:
-    image: ghcr.io/${GIT_USER}/filmreactnestback:latest
+    image: ${GIT_USER}/filmreactnestback:latest
     container_name: film-backend
-    build:
-      context: ./backend
     restart: unless-stopped
     stop_grace_period: 20s
     environment:
@@ -77,9 +72,7 @@ services:
       - db
 
   server:
-    build:
-      context: ./nginx
-    image: ghcr.io/${GIT_USER}/filmreactnestnginx:latest
+    image: ${GIT_USER}/filmreactnestnginx:latest
     container_name: film-nginx
     restart: unless-stopped
     stop_grace_period: 10s
