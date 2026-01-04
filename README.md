@@ -32,5 +32,11 @@ MongoDB должна быть установлена и запущена.
 Для проверки отправьте тестовый запрос с помощью Postman или `curl`.
 
 
+# Проектная работа «Деплой сервиса»
 
+https://github.com/erges699/film-react-nest
+
+# Сайт ergfilmnest живёт здесь:
+
+http://ergfilmnest.nomorepartiessbs.ru/
 
