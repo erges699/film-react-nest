@@ -5,6 +5,7 @@ import { JoiPipeModule } from 'nestjs-joi';
 import * as path from 'node:path';
 
 import { configProvider } from './app.config.provider';
+import { FilmsController } from './films/films.controller';
 
 @Module({
   imports: [
@@ -18,7 +19,7 @@ import { configProvider } from './app.config.provider';
     }),
     JoiPipeModule,
   ],
-  controllers: [],
+  controllers: [FilmsController],
   providers: [configProvider],
 })
 export class AppModule {}
